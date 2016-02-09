@@ -7,6 +7,7 @@ The requirements to make this work are:
 - Vagrant (free)
 - VMware Fusion v7 Professional (necessary for some of the networking elements)
 - The "vagrant-vmware-fusion" plugin (payment required)
+- Ansible (available via homebrew, pip, source)
 
 ## Clone the repo
 ```
@@ -17,7 +18,7 @@ git clone git@github.com:wchrisjohnson/devstack-ansible.git devstack
 ## Create the VM & provision devstack
 ```
 $ cd ~/devstack
-$ vagrant up --provider vmware_fusion
+$ vagrant up
 Bringing machine 'default' up with 'vmware_fusion' provider...
 ==> default: Cloning VMware VM: 'puphpet/ubuntu1404-x64'. This can take some time...
 ==> default: Checking if box 'puphpet/ubuntu1404-x64' is up to date...
