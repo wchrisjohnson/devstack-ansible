@@ -2,6 +2,12 @@
 Playbooks for building a virtualized devstack based on
 Vagrant + VMware Fusion for openstack development.
 
+## Prequisites
+The requirements to make this work are:
+- Vagrant (free)
+- VMware Fusion v7 Professional (necessary for some of the networking elements)
+- The "vagrant-vmware-fusion" plugin (payment required)
+
 ## Clone the repo
 ```
 cd ~/src
