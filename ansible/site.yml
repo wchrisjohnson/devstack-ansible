@@ -1,0 +1,8 @@
+---
+#
+# This playbook provisions a new VMware Fusion VM with devstack
+#
+- hosts: default
+  remote_user: vagrant
+  roles:
+    - devstack

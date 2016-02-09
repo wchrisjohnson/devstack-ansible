@@ -1,0 +1,128 @@
+#
+# https://wiki.openstack.org/wiki/NeutronDevstack
+#
+
+[[local|localrc]]
+
+# Credentials
+# -----
+ADMIN_PASSWORD={{ password }}
+MYSQL_PASSWORD={{ password }}
+DATABASE_PASSWORD={{ password }}
+RABBIT_PASSWORD={{ password }}
+SERVICE_PASSWORD={{ password }}
+SERVICE_TOKEN={{ service_token }}
+
+
+# HOST
+# -----
+HOST_IP={{host_ip}}
+SERVICE_HOST={{host_ip}}
+DATABASE_HOST={{host_ip}}
+RABBIT_HOST={{host_ip}}
+
+RECLONE={{ reclone }}
+# OFFLINE=True
+# MULTI_HOST=True
+API_RATE_LIMIT={{ api_rate_limit }}
+
+
+# Logging
+# -----
+LOGFILE={{ dest }}/logs/stack.sh.log
+LOGDAYS={{ logdays }}
+VERBOSE=True
+# LOG_COLOR=False
+SCREEN_LOGDIR={{ dest }}/logs/screen
+
+
+# Glance
+# -----
+GLANCE_BRANCH={{ branch }}
+
+# Horizon
+# -----
+HORIZON_BRANCH={{ branch }}
+
+# Keystone
+# -----
+KEYSTONE_BRANCH={{ branch }}
+
+# KEYSTONE_TOKEN_FORMAT=PKI
+
+# Nova
+# -----
+NOVA_BRANCH={{ branch }}
+
+# SCHEDULER=nova.scheduler.chance.ChanceScheduler
+
+# Neutron
+# -----
+NEUTRON_BRANCH={{ branch }}
+
+disable_service n-net
+
+# This is only necessary if multi-node
+#enable_service neutron
+#
+
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+# enable_service q-fwaas
+# enable_service q-lbaas
+# enable_service q-vpn
+
+# Q_PLUGIN=ml2
+# Q_ML2_PLUGIN_TYPE_DRIVERS=local,flat,gre
+# Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+
+PUBLIC_NETWORK_NAME=Ext-Net
+
+# Heat
+# -----
+HEAT_BRANCH={{ branch }}
+
+ENABLED_SERVICES+=,heat,h-api,h-api-cfn,h-api-cw,h-eng
+HEAT_STANDALONE=True
+
+# Cinder
+# -----
+# CINDER_BRANCH={{ branch }}
+
+# disable_service cinder
+
+# Ceilometer
+# -----
+# CEILOMETER_BRANCH={{ branch }}
+
+# ENABLED_SERVICES+=,ceilometer-acompute,ceilometer-acentral,ceilometer-collector,ceilometer-api
+# ENABLED_SERVICES+=,ceilometer-alarm-notify,ceilometer-alarm-eval
+
+# Swift
+# -----
+enable_service s-proxy s-object s-container s-account
+
+SWIFT_BRANCH={{ branch }}
+SWIFT_HASH={{ swift_hash }}
+SWIFT_REPLICAS={{ swift_replicas }}
+SWIFT_DATA_DIR={{ dest }}/data
+
+# Tempest
+# -------
+disable_service tempest
+
+
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+# scheduler_default_filters=AllHostsFilter
+
+[[post-config|$GLANCE_API_CONF]]
+[DEFAULT]
+# default_store=file
+
+[[post-config|/$Q_PLUGIN_CONF_FILE]]
+[DEFAULT]
+# tunnel_types=gre
