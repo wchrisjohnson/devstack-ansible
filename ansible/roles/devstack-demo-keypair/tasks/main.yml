@@ -1,0 +1,24 @@
+---
+
+# http://docs.openstack.org/infra/shade/#
+- name: devstack-demo-keypair | main | Ensure shade is installed
+  pip:
+    name: shade
+    state: present
+  become: yes
+
+# Generate a new ssh authentication keypair
+- name: devstack-demo-keypair | main | Generate keypair on VM
+  command: ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa creates=~/.ssh/id_rsa
+
+# Upload keypair via the demo user's credentials
+- name: devstack-demo-keypair | main | Upload keypair from VM to cloud
+  os_keypair:
+    state: present
+    name: demo_keypair
+    public_key: "{{lookup('file','~/.ssh/id_rsa.pub')}}"
+    auth:
+      auth_url: "{{ keystone_auth_url }}"
+      username: demo
+      password: "{{ password }}"
+      project_name: demo

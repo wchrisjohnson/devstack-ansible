@@ -2,20 +2,33 @@
 Playbooks for building a virtualized devstack based on
 Vagrant + VMware Fusion for openstack development.
 
-## Prequisites
+## Quickstart
+Here's how you get your devstack running as quickly as possible, using my defaults.
+
+### Prequisites
 The requirements to make this work are:
 - Vagrant (free)
 - VMware Fusion v7 Professional (necessary for some of the networking elements)
 - The "vagrant-vmware-fusion" plugin (payment required)
 - Ansible (available via homebrew, pip, source)
 
-## Clone the repo
+
+### Clone the repo
+Either clone this repo directly, or fork it and clone your fork.
+
+Clone directly:
 ```
 cd ~/src
 git clone git@github.com:wchrisjohnson/devstack-ansible.git devstack
 ```
 
-## Create the VM & provision devstack
+Fork this repo into your account and clone that repo:
+```
+cd ~/src
+git clone git@github.com:<your account>/devstack-ansible.git devstack
+```
+
+### Create the VM & provision devstack
 ```
 $ cd ~/devstack
 $ vagrant up
@@ -60,11 +73,12 @@ Bringing machine 'default' up with 'vmware_fusion' provider...
     ==> default: Running provisioner: ansible...
         default: Running ansible-playbook...
 
-    PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=true ANSIBLE_HOST_KEY_CHECKING=false ANSIBLE_SSH_ARGS='-o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes -o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s' ansible-playbook --connection=ssh --timeout=30 --limit='default' --inventory-file=/Users/wchrisjohnson/src/webapps/devstack/.vagrant/provisioners/ansible/inventory -vv ansible/site.yml
+    PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=true ANSIBLE_HOST_KEY_CHECKING=false ANSIBLE_SSH_ARGS='-o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes -o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s' ansible-playbook --connection=ssh --timeout=30 --limit='default' --inventory-file=/Users/wchrisjohnson/src/webapps/devstack/.vagrant/provisioners/ansible/inventory -vv ansible/devstack-deploy.yml
+
     No config file found; using defaults
-    1 plays in ansible/site.yml
+    1 plays in ansible/devstack-deploy.yml
     No config file found; using defaults
-    1 plays in ansible/site.yml
+    1 plays in ansible/devstack-deploy.yml
 
     PLAY ***************************************************************************
 
@@ -77,8 +91,7 @@ Bringing machine 'default' up with 'vmware_fusion' provider...
 
 ```
 
-## Check out your fresh devstack
-
+### Check out your fresh devstack
 If you review the log file (stack.log) on the devstack VM:
 ```
 This is your host IP address: 172.16.40.128
@@ -88,3 +101,11 @@ Keystone is serving at http://172.16.40.128:5000/
 The default users are: admin and demo
 The password: stack
 ```
+
+## More detail
+Now that you have devstck running, you might want to customize it and make it your own.
+
+### Devstack configuraton
+If you want to customize the way the devstck is installed, take a look at `ansible/host_vars/default` for a few vars you can change if you like.
+
+These vars are merged with the devstck config template at `ansible/roles/devstck/templates/devstck.j2`. The merged version of this file is pushed over to the VM into the devstack foder such that when the `stack.sh` is run, it will stand up the devstck based on the options in this config file.

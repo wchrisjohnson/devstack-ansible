@@ -66,10 +66,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.vmx["memsize"] = "8192"
     v.vmx["numvcpus"] = "2"
     v.vmx["vhv.enable"] = "TRUE"
+    # Necessary in Fusion 7 to prevent "Sleep Wake Failure" reboots
+    v.vmx["chipset.useAcpiBattery"] = "TRUE"
+    v.vmx["chipset.useApmBattery"] = "TRUE"
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "ansible/site.yml"
+    ansible.playbook = "ansible/devstack-deploy.yml"
     ansible.verbose = "vv"
   end
 

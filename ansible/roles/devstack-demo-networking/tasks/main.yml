@@ -1,0 +1,82 @@
+---
+
+# http://docs.openstack.org/infra/shade/#
+- name: devstack-demo-networking | main | Ensure shade is installed
+  pip:
+    name: shade
+    state: present
+  become: yes
+
+# turn on ip forwarding
+# - shell: sudo -- sh -c "echo 1 >> /proc/sys/net/ipv4/ip_forward"
+# ALREADY ON BY DEFAULT IN UBUNTU 14
+- name: devstack-demo-networking | main | Enable masqerade
+  shell: iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+  become: yes
+
+#
+# Setup DNS
+#
+# neutron subnet-update private-subnet --dns-nameservers list=true 8.8.8.8
+- name: devstack-demo-networking | main | setup DNS
+  os_subnet:
+    state: present
+    auth:
+      auth_url: "{{ keystone_auth_url }}"
+      username: demo
+      password: "{{ password }}"
+      project_name: demo
+    network_name: private
+    name: private-subnet
+    cidr: 10.0.0.0/24
+    dns_nameservers:
+       - 8.8.8.7
+       - 8.8.8.8
+
+#
+# enable ping, ssh and http access
+#
+# nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+- name: devstack-demo-networking | main | enable ping
+  os_security_group_rule:
+    state: present
+    auth:
+      auth_url: "{{ keystone_auth_url }}"
+      username: demo
+      password: "{{ password }}"
+      project_name: demo
+    security_group: default
+    protocol: icmp
+    port_range_min: -1
+    port_range_max: -1
+    remote_ip_prefix: 0.0.0.0/0
+
+# nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+- name: devstack-demo-networking | main | enable ssh access
+  os_security_group_rule:
+    state: present
+    auth:
+      auth_url: "{{ keystone_auth_url }}"
+      username: demo
+      password: "{{ password }}"
+      project_name: demo
+    security_group: default
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: 0.0.0.0/0
+
+# nova secgroup-add-rule default tcp 80 80 0.0.0.0/0
+- name: devstack-demo-networking | main | enable http access
+  os_security_group_rule:
+    state: present
+    auth:
+      auth_url: "{{ keystone_auth_url }}"
+      username: demo
+      password: "{{ password }}"
+      project_name: demo
+    security_group: default
+    protocol: tcp
+    port_range_min: 80
+    port_range_max: 80
+    remote_ip_prefix: 0.0.0.0/0
