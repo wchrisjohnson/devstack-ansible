@@ -2,6 +2,11 @@
 Build a virtualized devstack based on Vagrant + VMware Fusion +
 Ansible for openstack development.
 
+Note: There is now a branch for VirtualBox
+(https://www.virtualbox.org/wiki/Downloads) although it is just a copy of
+master at the moment and a work in progress. Check back soon to see if it is
+ready for use.
+
 ## Prequisites
 The requirements to make this work are:
 - Vagrant (open source, https://www.vagrantup.com/)
