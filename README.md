@@ -1,36 +1,27 @@
-# Devstack provisioning with VMware Fusion + Vagrant
-Playbooks for building a virtualized devstack based on
-Vagrant + VMware Fusion for openstack development.
+# Devstack provisioning with VMware Fusion + Vagrant + Ansible
+Build a virtualized devstack based on Vagrant + VMware Fusion +
+Ansible for openstack development.
 
-## Quickstart
-Here's how you get your devstack running as quickly as possible, using my defaults.
-
-### Prequisites
+## Prequisites
 The requirements to make this work are:
-- Vagrant (free)
-- VMware Fusion v7 Professional (necessary for some of the networking elements)
-- The "vagrant-vmware-fusion" plugin (payment required)
-- Ansible (available via homebrew, pip, source)
+- Vagrant (open source, https://www.vagrantup.com/)
+- VMware Fusion v7 Professional (paid, https://www.vmware.com/products/fusion)
+  (professional is necessary for some of the networking elements)
+- The "vagrant-vmware-fusion" plugin (paid, https://www.vagrantup.com/vmware/)
+  (necessary to allow vagrant to control Fusion)
+- Ansible (open source, https://www.ansible.com, available via homebrew, pip)
 
 
-### Clone the repo
-Either clone this repo directly, or fork it and clone your fork.
-
-Clone directly:
+## Clone the repo
+Fork this repo and clone it locally. PRs welcome!
 ```
-cd ~/src
-git clone git@github.com:wchrisjohnson/devstack-ansible.git devstack
-```
-
-Fork this repo into your account and clone that repo:
-```
-cd ~/src
+cd <folder>
 git clone git@github.com:<your account>/devstack-ansible.git devstack
 ```
 
-### Create the VM & provision devstack
+## Create the VM & provision devstack
 ```
-$ cd ~/devstack
+$ cd <devstack folder>
 $ vagrant up
 Bringing machine 'default' up with 'vmware_fusion' provider...
 ==> default: Cloning VMware VM: 'puphpet/ubuntu1404-x64'. This can take some time...
@@ -91,7 +82,7 @@ Bringing machine 'default' up with 'vmware_fusion' provider...
 
 ```
 
-### Check out your fresh devstack
+## Check out your fresh devstack
 If you review the log file (stack.log) on the devstack VM:
 ```
 This is your host IP address: 172.16.40.128
@@ -102,10 +93,13 @@ The default users are: admin and demo
 The password: stack
 ```
 
-## More detail
-Now that you have devstck running, you might want to customize it and make it your own.
+## Devstack customization
+If you want to customize the way the devstack is installed, take a look at `ansible/host_vars/default` for a few vars you can change if you like.
 
-### Devstack configuraton
-If you want to customize the way the devstck is installed, take a look at `ansible/host_vars/default` for a few vars you can change if you like.
+These vars are merged with the devstack config template at `ansible/roles/devstack/templates/devstack.j2`. The merged version of this file is pushed over to the VM into the devstack foder such that when the `stack.sh` is run, it will stand up the devstack based on the options in this config file.
 
-These vars are merged with the devstck config template at `ansible/roles/devstck/templates/devstck.j2`. The merged version of this file is pushed over to the VM into the devstack foder such that when the `stack.sh` is run, it will stand up the devstck based on the options in this config file.
+## To clean up
+To reset back to a clean slate and start over:
+```
+vagrant destroy
+```
