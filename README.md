@@ -1,6 +1,7 @@
 # Devstack provisioning with VMware Fusion + Vagrant + Ansible
 Build a virtualized devstack based on Vagrant + VMware Fusion +
-Ansible for openstack development.
+Ansible for openstack development. Treat your devstack like cattle,
+not your pet!
 
 Note: There is now a branch for VirtualBox
 (https://www.virtualbox.org/wiki/Downloads) although it is just a copy of

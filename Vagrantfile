@@ -63,12 +63,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   config.vm.provider "vmware_fusion" do |v|
     v.gui = false
-    v.vmx["memsize"] = "8192"
-    v.vmx["numvcpus"] = "2"
-    v.vmx["vhv.enable"] = "TRUE"
     # Necessary in Fusion 7 to prevent "Sleep Wake Failure" reboots
     v.vmx["chipset.useAcpiBattery"] = "TRUE"
     v.vmx["chipset.useApmBattery"] = "TRUE"
+    v.vmx["memsize"] = "8192"
+    v.vmx["numvcpus"] = "2"
+    v.vmx["vhv.enable"] = "TRUE"
+    v.vmx["virtualhw.version"] = "11"
   end
 
   config.vm.provision "ansible" do |ansible|
